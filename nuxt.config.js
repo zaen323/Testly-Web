@@ -12,7 +12,7 @@ module.exports = {
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
       { rel: 'stylesheet', type: 'text/css', href: 'https://fonts.googleapis.com/icon?family=Material+Icons' },
-      { rel: 'stylesheet', type: 'text/css', href: 'https://fonts.googleapis.com/css?family=Roboto:300,400' },
+      { rel: 'stylesheet', type: 'text/css', href: 'https://fonts.googleapis.com/css?family=Roboto:100,300,400' },
       { rel: 'stylesheet', type: 'text/css', href: 'https://code.getmdl.io/1.3.0/material.indigo-pink.min.css' }
     ],
     script: [

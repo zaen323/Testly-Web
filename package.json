@@ -6,6 +6,7 @@
     "generate": "nuxt generate"
   },
   "dependencies": {
+    "firebase": "^4.12.1",
     "nuxt": "^1.4.0"
   }
 }
