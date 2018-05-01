@@ -5,18 +5,16 @@
         Login with Google
       </button>
       <p>OR</p>
-      <form action="#">
-        <div class="mdl-textfield mdl-js-textfield">
-          <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="grade" v-model="grade">
-          <label class="mdl-textfield__label" for="grade">Grade</label>
-          <span class="mdl-textfield__error">Input is not a number!</span>
-        </div>
-        <div class="mdl-textfield mdl-js-textfield">
-          <input class="mdl-textfield__input" type="text" id="name" v-model="name">
-          <label class="mdl-textfield__label" for="name">Name</label>
-        </div>
-      </form>
-      <button @click="$store.dispatch('authSignUp', { grade, name })" id="signupbtn" class="mdl-button mdl-js-button mdl-button--raised mdl-color--white">
+      <div class="mdl-textfield mdl-js-textfield">
+        <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="grade" v-model="grade">
+        <label class="mdl-textfield__label" for="grade">Grade</label>
+        <span class="mdl-textfield__error">Input is not a number!</span>
+      </div>
+      <div class="mdl-textfield mdl-js-textfield">
+        <input class="mdl-textfield__input" type="text" id="name" v-model="name">
+        <label class="mdl-textfield__label" for="name">Name</label>
+      </div>
+      <button @click="signup" id="signupbtn" class="mdl-button mdl-js-button mdl-button--raised mdl-color--white">
         Sign up with Google
       </button>
     </main>
@@ -34,12 +32,12 @@ export default {
       grade: ''
     }
   },
-  mounted () {
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        this.$store.commit('register')
+  methods: {
+    signup: function () {
+      if (this.name !== '' && this.grade !== '') {
+        this.$store.dispatch('authSignUp', { grade, name })
       }
-    })
+    }
   }
 }
 </script>

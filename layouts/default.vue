@@ -1,5 +1,6 @@
 <template>
-  <Login v-if="!$store.state.registered"></Login>
+  <div v-if="$store.state.loginState === 'unknown'"></div>
+  <Login v-else-if="$store.state.loginState === 'unregistered'"></Login>
   <div v-else id="page" class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
     <header class="mdl-layout__header mdl-layout__header--transparent mdl-color-text--grey-900">
       <div class="mdl-layout__header-row">
@@ -30,11 +31,20 @@ export default {
       document.getElementsByClassName('mdl-layout__drawer')[0].classList.remove('is-visible')
       document.getElementsByClassName('mdl-layout__obfuscator')[0].classList.remove('is-visible')
     }
+  },
+  mounted () {
+    this.$store.dispatch('authCheck');
+  },
+  updated () {
+    window.componentHandler.upgradeDom()
   }
 }
 </script>
 
 <style>
+.mdl-layout__drawer-button, .mdl-navigation__link {
+  outline: 0;
+}
 body {
   font-family: 'Roboto', 'Helvetica', sans-serif;
   color: #212121;

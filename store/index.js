@@ -4,31 +4,53 @@ import Vuex from 'vuex'
 
 const store = () => new Vuex.Store({
   state: {
-    registered: false
+    loginState: 'unknown'
   },
   mutations: {
-    register (state) {
-      state.registered = true
+    setRegistered (state) {
+      state.loginState = 'registered'
+    },
+    setUnregistered (state) {
+      state.loginState = 'unregistered'
     }
   },
   actions: {
+    /**
+     * Show google login popup window.
+     */
     authLogin ({ commit }) {
       firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider())
+    },
+    /**
+     * Start auth checking. Call only once per session.
+     */
+    authCheck ({ commit }) {
       firebase.auth().onAuthStateChanged(async (user) => {
         if (user) {
           let doc = await firebase.firestore().collection('users').doc(user.uid).get()
           if (doc.get('grade') !== undefined && doc.get('name') !== undefined) {
-            commit('register');
+            commit('setRegistered');
+            return;
           }
         }
+
+        commit('setUnregistered');
       })
     },
+    /**
+     * Show google login popup window.
+     * When the user successfully logged in, alter the firestore database.
+     */
     authSignUp ({ commit }, { grade, name }) {
       firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider())
       firebase.auth().onAuthStateChanged(async (user) => {
-        if (user) {
-          commit('register');
-          await firebase.firestore().collection('users').doc(user.uid).set({ grade, name });
+        if (user && this.loginState === 'unregistered') {
+          let doc = await firebase.firestore().collection('users').doc(user.uid).get()
+          if (doc.get('grade') === undefined || doc.get('name') === undefined) {
+            await firebase.firestore().collection('users').doc(user.uid).set({ grade: parseInt(grade), name });
+          }
+          
+          commit('setRegistered')
         }
       })
     }
